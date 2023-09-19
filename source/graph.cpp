@@ -2,9 +2,64 @@
 
 #include <algorithm>
 #include <random>
+#include <queue>
+#include <stack>
 
-// defining fill function, which fills an empty map with numOfNodes and randomly
+// defining BFS, DFS and fill function, which fills an empty map with numOfNodes and randomly
 // generated edges, preceded by its auxiliary functions
+
+std::vector<int>& Graph::bfs(int const start, std::vector<int>& traversal) {
+  assert(traversal.empty());
+
+  std::vector<bool> visited(adjList_.size(), false);
+  std::queue<int> queue;
+  visited[start] = true;
+  queue.push(start);
+
+  while (!queue.empty()) {
+    int current{queue.front()};
+    queue.pop();
+    traversal.push_back(current);
+
+    for (int const& neighbor : adjList_[current]) {
+      if (!visited[neighbor]) {
+        visited[neighbor] = true;
+        queue.push(neighbor);
+      }
+    }
+  }
+
+  return traversal;
+}
+
+std::vector<int>& Graph::dfs(int const start, std::vector<int>& traversal) {
+  assert(traversal.empty());
+
+  std::vector<bool> visited(adjList_.size(), false);
+  std::stack<int> stack;
+  visited[start] = true;
+  stack.push(start);
+
+  while (!stack.empty()) {
+    int current{stack.top()};
+    stack.pop();
+    traversal.push_back(current);
+
+    for (int const& neighbor : adjList_[current]) {
+      if (!visited[neighbor]) {
+        visited[neighbor] = true;
+        stack.push(neighbor);
+      }
+    }
+  }
+  return traversal;
+}
+
+void printTraversal(std::vector<int> const& traversal) {
+  for (int const& i : traversal) {
+    std::cout << i << "  ";
+  }
+}
 
 void removeElement(std::vector<int>::iterator const& element,
                    std::vector<int>& vec) {
@@ -41,8 +96,7 @@ std::vector<std::vector<int>>& generateRandomEdges(
     // adding i to the lists of its neighbors
     for (auto const& neighbor : neighbors[i]) {
       if (neighbor > i) {
-        auto& vec{neighbors[neighbor]};
-        vec.push_back(i);
+        neighbors[neighbor].push_back(i);
       }
     }
   }

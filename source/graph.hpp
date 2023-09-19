@@ -2,6 +2,7 @@
 #define GRAPH_HPP
 
 #include <cassert>
+#include <iostream>
 #include <random>
 #include <unordered_map>
 #include <vector>
@@ -21,9 +22,13 @@ class Graph {
   // numOfNodes is an int
   int size() const { return adjList_.size(); }
   std::vector<int>& operator[](int index) { return adjList_[index]; }
-  void BFS();  // breadth first search
-  void DFS();  // depth first search
+  std::vector<int>& bfs(int const start,
+                        std::vector<int>& traversal);  // breadth first search
+  std::vector<int>& dfs(int const start,
+                        std::vector<int>& traversal);  // depth first search
 };
+
+void printTraversal(std::vector<int> const& traversal);
 
 void removeElement(std::vector<int>::iterator const& element,
                    std::vector<int>& vec);

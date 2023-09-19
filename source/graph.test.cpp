@@ -56,8 +56,8 @@ TEST_CASE("testing removeElement") {
 
 TEST_CASE("testing fill") {
   std::unordered_map<int, std::vector<int>> adjList{};
-  int numOfNodes{100};
-  int numOfEdges{5};
+  int numOfNodes{50};
+  int numOfEdges{3};
   std::random_device rd;
   auto const seed{rd()};
 
