@@ -2,16 +2,37 @@
 #include <iostream>
 
 #include "graph.hpp"
+#include "parser.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
   try {
-    // instantiates a simple connected graph with numOfNodes represented through
+    // instantiates a simple graph with numOfNodes represented through
     // adjacency list with randomly generated edges
 
+    // default values are modified only if an input value is specified
     int numOfNodes{50};
     int numOfEdges{4};
+    bool show_help{false};
     std::random_device rd;
     auto const seed{rd()};
+
+    // Parser with multiple option arguments and help option
+    auto parser = get_parser(numOfNodes, numOfEdges, show_help);
+    // Parses the arguments
+    auto result = parser.parse({argc, argv});
+    // Checks that arguments were valid
+    if (!result) {
+      std::cerr << "Error occurred in command line: " << result.message() << '\n'
+                << parser << '\n';
+      return EXIT_FAILURE;
+    }
+    // Shows the help if asked for
+    if (show_help) {
+      std::cout << parser << '\n';
+      return EXIT_SUCCESS;
+    }
+
+    assert(result && (!show_help));
 
     std::unordered_map<int, std::vector<int>> adjList{};
     Graph graph{fill(adjList, numOfNodes, numOfEdges, seed)};
